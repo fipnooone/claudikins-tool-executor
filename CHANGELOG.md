@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-04-21
+
+### Changed
+
+- `UserPromptSubmit` hook (`search-tools-activation.sh`): renamed from MANDATORY to GUIDANCE; inverted priority to native-tools-first — Read/Grep/Glob/Bash are the default, MCP tools only when basic tools cannot do the job
+- Removed Gemini from default quick-reference for code analysis and content summarisation (Claude handles these natively)
+- `using-tool-executor` skill: updated tool-selection table — web research now defaults to `WebSearch`, Gemini deep-research only as fallback when WebSearch is insufficient
+- `plugin.json`: updated author, homepage, and repository to fipnooone fork
+
 ## [1.0.1] - 2026-01-20
 
 ### Fixed

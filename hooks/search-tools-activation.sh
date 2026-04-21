@@ -1,57 +1,44 @@
 #!/bin/bash
 # MCP Tool Discovery Activation Hook
-# Ensures Claude uses search_tools before defaulting to basic tools
+# Reminds Claude when MCP tools are appropriate vs basic tools
 
 # Build the system message
 read -r -d '' MESSAGE <<'PROMPT'
-INSTRUCTION: MANDATORY MCP TOOL DISCOVERY SEQUENCE
+GUIDANCE: MCP TOOL DISCOVERY
 
 You have access to a tool-executor MCP that wraps 7 specialized MCP servers with 96 tools.
-BEFORE using basic tools (Read, Grep, Glob, Bash), you MUST check if a better tool exists.
+Basic tools (Read, Grep, Glob, Bash) are your DEFAULT. Use MCP only when basic tools cannot do the job.
 
-## Step 1 - EVALUATE (think about this):
-Could any of these MCP categories help with this task?
+## Decision rule: basic tools first
 
-| Category | Server | Capabilities |
-|----------|--------|--------------|
-| code-nav | Serena (28 tools) | Symbol search, refactoring, code analysis, persistent memory, pattern search, shell execution |
-| knowledge | Context7, NotebookLM | Library docs lookup, notebook Q&A, research management |
-| ai-models | Gemini (37 tools) | Deep research agent, brainstorming (Claude+Gemini), code analysis, structured output, 4K image generation + multi-turn editing, video generation, thinking levels, summarization, Google search, URL/document analysis |
-| reasoning | Sequential-thinking | Multi-step reasoning with thought chains |
-| ui | shadcn | Component search, examples, implementation details |
-| web | Apify | Actor-based web scraping, RAG browser, data extraction |
+| Task | Default | Use MCP instead when... |
+|------|---------|------------------------|
+| Read a file | `Read` | never |
+| Search for string | `Grep` | need semantic/symbol search → Serena |
+| Find files | `Glob` | never |
+| Run commands | `Bash` | never |
+| Analyze visible code | your reasoning | cross-repo security audit → Gemini |
+| Library docs | `WebFetch` | official structured docs → Context7 |
+| Web research | `WebSearch` | need synthesis of many sources → Gemini |
+| Summarize content | your reasoning | never |
 
-## Step 2 - SEARCH (do this if any category might help):
-```
-mcp__tool-executor__search_tools({ query: "describe what you need" })
-```
+## When MCP genuinely helps (use search_tools → get_tool_schema → execute_code):
+- "Find where symbol X is defined/used across the codebase" → Serena semantic search
+- "Rename this function everywhere" → Serena rename_symbol
+- "What's the full API for library Y?" → Context7 query-docs
+- "Research external topic, WebSearch gave sparse results" → Gemini deep-research
+- "Brainstorm with a second AI perspective" → Gemini brainstorm
+- "Generate an image" → Gemini image generation
+- "Help me reason through a complex multi-step problem" → Sequential-thinking
+- "Build a UI component" → shadcn
+- "Scrape data from a website" → Apify
 
-## Step 3 - USE or FALLBACK:
-- If search_tools finds a relevant tool → use get_tool_schema then execute_code
-- If no relevant MCP tool exists → proceed with basic tools
+## MCP workflow (when you do use it):
+1. search_tools("describe what you need") — find the tool
+2. get_tool_schema("tool_name") — get exact parameters
+3. execute_code(...) — run it
 
-## CRITICAL RULES:
-1. NEVER skip to basic tools without considering Step 1
-2. If task involves: docs lookup, code search, web data, UI generation, or complex reasoning
-   → You MUST run search_tools first
-3. Basic tools (Read/Grep/Glob) are for simple file operations ONLY
-4. When in doubt, search first - it costs nothing
-
-## Quick Reference - When to ALWAYS search_tools:
-- "Find where X is defined/used" → Serena symbol search & references
-- "Refactor this code" → Serena rename_symbol, replace_symbol_body
-- "What's the API for library Y?" → Context7 docs lookup
-- "Research topic Z thoroughly" → Gemini deep-research agent
-- "Help me brainstorm/ideate" → Gemini brainstorming (Claude+Gemini collab)
-- "Analyze this code" → Gemini code analysis (security, quality, performance)
-- "Extract structured data" → Gemini structured output with schema
-- "Summarize this content" → Gemini summarization
-- "Generate/edit an image" → Gemini 4K image generation + multi-turn editing
-- "Help me think through this" → Sequential-thinking
-- "Build a UI component" → shadcn examples & details
-- "Scrape data from website" → Apify actors
-
-Proceed with your task, following this sequence.
+Proceed with your task.
 PROMPT
 
 # Output JSON with systemMessage for Claude to see
