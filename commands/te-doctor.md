@@ -1,7 +1,7 @@
 ---
 name: claudikins-tool-executor:doctor
 description: Diagnose Tool Executor issues - run tests, check health, troubleshoot
-argument-hint: <mode: test|health|reset> [--verbose]
+argument-hint: "<mode: test|health|reset> [--verbose]"
 allowed-tools:
   - Read
   - Bash
@@ -33,12 +33,12 @@ You are orchestrating Tool Executor diagnostics with clear reporting at each ste
 
 ## Health Check Items
 
-| Check | Command | Expected |
-|-------|---------|----------|
-| Build current | `npm run build` | Exit 0 |
-| Tests pass | `npm test` | 43 passing |
-| Registry valid | Check `registry/*.json` | Valid JSON |
-| Workspace clean | Check `./workspace/` | Exists, writable |
+| Check           | Command                 | Expected         |
+| --------------- | ----------------------- | ---------------- |
+| Build current   | `npm run build`         | Exit 0           |
+| Tests pass      | `npm test`              | 43 passing       |
+| Registry valid  | Check `registry/*.json` | Valid JSON       |
+| Workspace clean | Check `./workspace/`    | Exists, writable |
 
 ## Critical Facts
 

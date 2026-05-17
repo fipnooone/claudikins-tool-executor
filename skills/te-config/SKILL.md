@@ -27,7 +27,12 @@ Create `tool-executor.config.json` in the project root:
       "name": "serena",
       "displayName": "Serena",
       "command": "uvx",
-      "args": ["--from", "git+https://github.com/oraios/serena", "serena", "start-mcp-server"]
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server"
+      ]
     },
     {
       "name": "gemini",
@@ -43,6 +48,7 @@ Create `tool-executor.config.json` in the project root:
 ```
 
 ### Config File Locations (checked in order)
+
 1. `tool-executor.config.json`
 2. `tool-executor.config.js`
 3. `.tool-executorrc.json`
@@ -76,7 +82,7 @@ Edit `src/types.ts` to add the client type:
 export interface MCPClients {
   serena: Client | null;
   // ... existing clients ...
-  newServer: Client | null;  // Add this
+  newServer: Client | null; // Add this
 }
 ```
 
@@ -92,7 +98,7 @@ This connects to all configured MCP servers and generates YAML files in `registr
 
 ```bash
 npm run build
-# Restart Claude Code to pick up new MCP server
+# Restart Claude Code or OpenClaude to pick up new MCP server
 ```
 
 ## Removing an MCP Server
@@ -137,14 +143,15 @@ Environment variables use `${VAR_NAME}` syntax in config:
 
 ### Required Environment Variables
 
-| Server | Variable | Purpose |
-|--------|----------|---------|
-| gemini | `GEMINI_API_KEY` | Google AI API key |
-| apify | `APIFY_TOKEN` | Apify platform token |
+| Server | Variable         | Purpose              |
+| ------ | ---------------- | -------------------- |
+| gemini | `GEMINI_API_KEY` | Google AI API key    |
+| apify  | `APIFY_TOKEN`    | Apify platform token |
 
 ### Setting Variables
 
-**In Claude Code config (~/.claude.json):**
+**In Claude Code/OpenClaude config (~/.claude.json):**
+
 ```json
 {
   "mcpServers": {
@@ -159,6 +166,7 @@ Environment variables use `${VAR_NAME}` syntax in config:
 ```
 
 **Or in shell:**
+
 ```bash
 export GEMINI_API_KEY="your-key-here"
 ```
@@ -231,15 +239,15 @@ npm run build
 
 These are the built-in defaults if no config file exists:
 
-| Name | Command | Package |
-|------|---------|---------|
-| serena | uvx | git+https://github.com/oraios/serena |
-| context7 | npx | @upstash/context7-mcp |
-| gemini | npx | @rlabs-inc/gemini-mcp |
-| notebooklm | npx | notebooklm-mcp |
-| shadcn | npx | shadcn-ui-mcp-server |
-| apify | npx | @apify/actors-mcp-server |
-| sequentialThinking | npx | @modelcontextprotocol/server-sequential-thinking |
+| Name               | Command | Package                                          |
+| ------------------ | ------- | ------------------------------------------------ |
+| serena             | uvx     | git+https://github.com/oraios/serena             |
+| context7           | npx     | @upstash/context7-mcp                            |
+| gemini             | npx     | @rlabs-inc/gemini-mcp                            |
+| notebooklm         | npx     | notebooklm-mcp                                   |
+| shadcn             | npx     | shadcn-ui-mcp-server                             |
+| apify              | npx     | @apify/actors-mcp-server                         |
+| sequentialThinking | npx     | @modelcontextprotocol/server-sequential-thinking |
 
 ## Source Code Reference
 

@@ -1,7 +1,7 @@
 ---
 name: claudikins-tool-executor:guide
 description: Learn how to use the Tool Executor - 3-tool workflow, workspace API, MCP clients
-argument-hint: [topic: workflow|workspace|mcp|patterns]
+argument-hint: "[topic: workflow|workspace|mcp|patterns]"
 allowed-tools:
   - Read
   - Glob
@@ -41,15 +41,15 @@ You are teaching Tool Executor usage with clear examples and explanations.
 
 ## Key Concepts
 
-| Concept | Description |
-|---------|-------------|
-| **Semantic Search** | Serena-powered with BM25 fallback over 102 tools |
-| **Workspace API** | Sandboxed file operations in `./workspace/` |
-| **Lazy Loading** | MCP clients connect on first use, disconnect after 3 mins |
-| **Context Efficiency** | Large responses (>200 chars) auto-saved to workspace |
+| Concept                | Description                                               |
+| ---------------------- | --------------------------------------------------------- |
+| **Semantic Search**    | Serena-powered with BM25 fallback over 96 tools           |
+| **Workspace API**      | Sandboxed file operations in `./workspace/`               |
+| **Lazy Loading**       | MCP clients connect on first use, disconnect after 3 mins |
+| **Context Efficiency** | Large responses (>200 chars) auto-saved to workspace      |
 
 ## Critical Facts
 
 - **97% context reduction** - 48k tokens down to 1.1k
-- **9 MCP servers** - Wrapped into 3 context-efficient tools
+- **7 MCP servers** - Wrapped into 3 context-efficient tools
 - **Sandbox isolation** - All paths scoped to `./workspace/`

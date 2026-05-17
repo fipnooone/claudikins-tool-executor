@@ -66,7 +66,7 @@ digraph tool_flow {
 
 | Category  | Server               | Capabilities                                                          |
 | --------- | -------------------- | --------------------------------------------------------------------- |
-| code-nav  | Serena (28 tools)    | Symbol search, refactoring, code analysis, persistent memory          |
+| code-nav  | Serena (29 tools)    | Symbol search, refactoring, code analysis, persistent memory          |
 | knowledge | Context7, NotebookLM | Library docs lookup, notebook Q&A, research                           |
 | ai-models | Gemini (37 tools)    | Deep research, brainstorming, image gen, video gen, structured output |
 | reasoning | Sequential-thinking  | Multi-step reasoning with thought chains                              |

@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="assets/banner.png" alt="Tool Executor - Programmatic MCP Execution for Claude Code" width="100%">
+  <img src="assets/banner.png" alt="Tool Executor - Programmatic MCP Execution for Claude Code/OpenClaude-compatible runtimes" width="100%">
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Claude-D97757?style=flat-square&logo=claude&logoColor=white" alt="Claude">
   <img src="https://img.shields.io/badge/Gemini-8E75B2?style=flat-square&logo=google%20gemini&logoColor=white" alt="Google Gemini">
-  <a href="https://github.com/elb-pr/claudikins-tool-executor/commits/main"><img src="https://img.shields.io/github/last-commit/elb-pr/claudikins-tool-executor?style=flat-square" alt="Last Commit"></a>
+  <a href="https://github.com/fipnooone/claudikins-tool-executor/commits/main"><img src="https://img.shields.io/github/last-commit/fipnooone/claudikins-tool-executor?style=flat-square" alt="Last Commit"></a>
   <img src="https://img.shields.io/badge/node-18%2B-brightgreen?style=flat-square" alt="Node.js 18+">
   <img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License">
 </p>
@@ -13,7 +13,7 @@
 <h1 align="center">Tool Executor</h1>
 
 <p align="center">
-  <strong>Programmatic MCP Execution for Claude Code</strong><br>
+  <strong>Programmatic MCP Execution for Claude Code/OpenClaude-compatible runtimes</strong><br>
   <em>The API has batched tool calling. Claude Code gets serial execution. This bridges the gap.</em>
 </p>
 
@@ -29,12 +29,12 @@
 
 Anthropic's API users get [programmatic tool calling](https://docs.anthropic.com/en/docs/build-with-claude/tool-use) - Claude writes code, executes N tools in a sandbox, returns once. Claude Code users get serial execution and lazy loading. Tool Executor brings the API pattern to Claude Code.
 
-| Aspect | Claude Code (stable) | Claude Code 2.1.7 | Tool Executor |
-|--------|---------------------|------------------|---------------|
-| **Schema Loading** | All upfront | Lazy (>10% threshold) | Lazy (search on demand) |
-| **Execution** | Serial (pause per tool) | Serial (pause per tool) | Batched (N tools, 1 return) |
-| **Output Handling** | Dumps to context | Dumps to context | Auto-saves to workspace |
-| **Tool Awareness** | All schemas visible | "Search available" | Hook-injected guidance |
+| Aspect              | Claude Code (stable)    | Claude Code 2.1.7       | Tool Executor               |
+| ------------------- | ----------------------- | ----------------------- | --------------------------- |
+| **Schema Loading**  | All upfront             | Lazy (>10% threshold)   | Lazy (search on demand)     |
+| **Execution**       | Serial (pause per tool) | Serial (pause per tool) | Batched (N tools, 1 return) |
+| **Output Handling** | Dumps to context        | Dumps to context        | Auto-saves to workspace     |
+| **Tool Awareness**  | All schemas visible     | "Search available"      | Hook-injected guidance      |
 
 **Context savings:** ~97% reduction (48k to 1.1k tokens) for multi-tool workflows.
 
@@ -50,7 +50,7 @@ Anthropic's API users get [programmatic tool calling](https://docs.anthropic.com
 /plugin install claudikins-tool-executor
 ```
 
-Restart Claude Code. Done.
+Restart Claude Code or OpenClaude. Done.
 
 ### First Workflow
 
@@ -59,6 +59,7 @@ Search for image generation tools, then generate a robot writing documentation.
 ```
 
 Claude will:
+
 1. Use `search_tools` to find relevant tools
 2. Use `get_tool_schema` to load the exact parameters
 3. Use `execute_code` to run the generation in one shot
@@ -104,7 +105,7 @@ TypeScript execution with pre-connected MCP clients. Write code that calls multi
 ```typescript
 const result = await gemini["gemini_generateContent"]({
   prompt: "A robot writing documentation",
-  aspectRatio: "16:9"
+  aspectRatio: "16:9",
 });
 
 // Large responses auto-save to workspace
@@ -154,6 +155,7 @@ if (result._savedTo) {
 ### Session Hooks
 
 Unlike native MCP, Tool Executor injects guidance every session. Claude knows:
+
 - What MCP categories exist (ai-models, code-nav, web, knowledge, reasoning, ui)
 - When to use MCP vs basic tools
 - The exact search → schema → execute workflow
@@ -169,7 +171,9 @@ MCP tools often return large payloads. Web scrapes, code analysis, generated con
 Tool Executor intercepts responses over 200 characters and saves them to workspace files. Your code receives a reference:
 
 ```typescript
-const scrapeResult = await apify["apify_scrape"]({ url: "https://example.com" });
+const scrapeResult = await apify["apify_scrape"]({
+  url: "https://example.com",
+});
 
 // Large response auto-saved
 // { _savedTo: "mcp-results/1705312345678.json", _preview: "...", _size: 15234 }
@@ -186,15 +190,15 @@ Context stays lean. Data stays accessible.
 
 Pre-configured MCP servers available in the sandbox. These are examples - configure your own.
 
-| Server | Category | Tools | Capabilities |
-|--------|----------|-------|--------------|
-| `serena` | code-nav | 29 | Semantic code search, symbol references, refactoring (rename/replace), file ops, shell execution, persistent memory, pattern search |
-| `gemini` | ai-models | 37 | Deep research agent, Claude+Gemini brainstorming, code analysis, structured output, 4K image gen + multi-turn editing, video gen, TTS, Google search |
-| `notebooklm` | knowledge | 16 | Notebook management, Q&A, research, library stats |
-| `apify` | web | 7 | Actor-based web scraping, RAG browser, data extraction |
-| `shadcn` | ui | 4 | Component search, details, examples |
-| `context7` | knowledge | 2 | Library docs lookup, library ID resolution |
-| `sequentialThinking` | reasoning | 1 | Multi-step reasoning with thought chains |
+| Server               | Category  | Tools | Capabilities                                                                                                                                         |
+| -------------------- | --------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `serena`             | code-nav  | 29    | Semantic code search, symbol references, refactoring (rename/replace), file ops, shell execution, persistent memory, pattern search                  |
+| `gemini`             | ai-models | 37    | Deep research agent, Claude+Gemini brainstorming, code analysis, structured output, 4K image gen + multi-turn editing, video gen, TTS, Google search |
+| `notebooklm`         | knowledge | 16    | Notebook management, Q&A, research, library stats                                                                                                    |
+| `apify`              | web       | 7     | Actor-based web scraping, RAG browser, data extraction                                                                                               |
+| `shadcn`             | ui        | 4     | Component search, details, examples                                                                                                                  |
+| `context7`           | knowledge | 2     | Library docs lookup, library ID resolution                                                                                                           |
+| `sequentialThinking` | reasoning | 1     | Multi-step reasoning with thought chains                                                                                                             |
 
 **96 tools. 3 exposed. ~97% fewer tokens.**
 
@@ -259,12 +263,12 @@ Works out of the box. For custom servers, create `tool-executor.config.json`:
 
 Some bundled servers need API keys:
 
-| Server | Variable | Required |
-|--------|----------|----------|
+| Server | Variable         | Required             |
+| ------ | ---------------- | -------------------- |
 | gemini | `GEMINI_API_KEY` | Yes for Gemini tools |
-| apify | `APIFY_TOKEN` | Yes for Apify tools |
+| apify  | `APIFY_TOKEN`    | Yes for Apify tools  |
 
-Set in Claude Code config (`~/.claude.json`) or shell environment.
+Set in Claude Code/OpenClaude config (`~/.claude.json`) or shell environment.
 
 </details>
 
@@ -284,11 +288,13 @@ Tool Executor optimises for breadth. Skip it if:
 ## Skills & Commands
 
 **Skills:**
+
 - `/te-guide` - Usage guidance and examples
 - `/te-config` - Configuration help
 - `/te-doctor` - Diagnose connection issues
 
 **Hooks:**
+
 - `SessionStart` - Injects tool guidance every session
 - `UserPromptSubmit` - Activates discovery on relevant prompts
 
@@ -298,26 +304,26 @@ Tool Executor optimises for breadth. Skip it if:
 
 ### Immediate
 
-| Feature | Status |
-|---------|--------|
-| Fluent `.full()` method for `_savedTo` results | Planned |
+| Feature                                         | Status  |
+| ----------------------------------------------- | ------- |
+| Fluent `.full()` method for `_savedTo` results  | Planned |
 | Structured preview metadata (type, keys, shape) | Planned |
-| Actionable error messages with recovery steps | Planned |
+| Actionable error messages with recovery steps   | Planned |
 
 ### Short-Term
 
-| Feature | Status |
-|---------|--------|
-| Pre-indexed vector search (faster startup) | Considering |
+| Feature                                           | Status      |
+| ------------------------------------------------- | ----------- |
+| Pre-indexed vector search (faster startup)        | Considering |
 | Generated TypeScript definitions for autocomplete | Considering |
 
 ### Not Planned
 
-| Feature | Why |
-|---------|-----|
-| Production API replacement | Out of scope - this is a dev tool |
-| Streaming MCP proxy | Complexity vs benefit |
-| Universal MCP wrapper | Claude Code-specific by design |
+| Feature                    | Why                                                      |
+| -------------------------- | -------------------------------------------------------- |
+| Production API replacement | Out of scope - this is a dev tool                        |
+| Streaming MCP proxy        | Complexity vs benefit                                    |
+| Universal MCP wrapper      | Claude Code/OpenClaude plugin-runtime-specific by design |
 
 ### Community Contributions Welcome
 

@@ -1,7 +1,7 @@
 ---
 name: claudikins-tool-executor:config
 description: Configure Tool Executor - add/remove MCP servers, set environment variables
-argument-hint: <action: add|remove|list|env> [server-name]
+argument-hint: "<action: add|remove|list|env> [server-name]"
 allowed-tools:
   - Read
   - Edit
@@ -37,8 +37,9 @@ You are orchestrating Tool Executor configuration changes with user guidance at 
 ## Post-Configuration
 
 After any configuration changes, remind the user to:
+
 1. Run `npm run build`
-2. Restart Claude Code
+2. Restart Claude Code or OpenClaude
 
 ## Critical Facts
 

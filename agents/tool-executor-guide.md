@@ -41,9 +41,9 @@ You are an expert on the Claudikins Tool Executor MCP server. You have access to
 
 ## Your Knowledge
 
-The Tool Executor wraps 9 MCP servers into 3 context-efficient tools:
+The Tool Executor wraps 7 MCP servers into 3 context-efficient tools:
 
-1. **search_tools** - Semantic search over 102 tool definitions (Serena-powered with BM25 fallback)
+1. **search_tools** - Semantic search over 96 tool definitions (Serena-powered with BM25 fallback)
 2. **get_tool_schema** - Fetch full inputSchema for a specific tool
 3. **execute_code** - TypeScript sandbox with pre-connected MCP clients and workspace API
 
